@@ -1,6 +1,6 @@
 // * Values and Variables
 
-/* 
+/*
 !aa
 
 console.log(40 + 8 + 23 - 10);
@@ -51,13 +51,13 @@ null
 
 // BigInt Larger integers than the Number type can hold
 
-/*  
+/*
 
-!Javascript has dynamic typing: we dont have to manually define thje data type of the value stored in a variable. Instead, data types are  determinated automatically. 
+!Javascript has dynamic typing: we dont have to manually define thje data type of the value stored in a variable. Instead, data types are  determinated automatically.
 
 */
 
-/* 
+/*
 !a
 
 let javascriptIsFun = true;
@@ -103,11 +103,11 @@ console.log(lastName);
 
 // * Basic Operator
 
+/*
 const currentYear = 2025;
 const ageJonas = currentYear - 2000;
 const ageSarah = currentYear - 2005;
 
-/*
 console.log(ageJonas, ageSarah);
 
 console.log(ageJonas * 2, ageJonas / 2, 2 ** 3);
@@ -206,11 +206,122 @@ console.log(century);
 
 */
 
+// * Type coercion
+
+/*
 const inputYear = '1991';
+
+//! Number and String coercion
 console.log(Number(inputYear), inputYear);
 console.log(Number(inputYear) + 18);
-
 console.log(Number('Jonas'));
 console.log(typeof NaN);
+console.log(String(23), 23);
 
-console.log(String(23));
+//! Type coercion
+
+console.log('I am ' + 23 + ' years old');
+console.log('23' - '10' - 3);
+
+console.log('23' * '2');
+
+let n = '1' + 1;
+
+n = n - 1;
+console.log(n);
+
+*/
+
+// * Thruty and Falsy values
+
+/*
+
+//! 5 Falsy values: 0, '', undefined, null, NaN
+console.log(Boolean(0));
+console.log(Boolean(undefined));
+console.log(Boolean('Jonas'));
+console.log(Boolean({}));
+console.log(Boolean(''));
+
+
+const money = 0;
+
+if (money) {
+  console.log("Don't spend it all ;)");
+} else {
+  console.log('You should get a job!');
+}
+
+// false porque money es 0 y es un falsy
+
+
+let height;
+
+if (height) {
+  console.log('YAY! Height is defined');
+} else {
+  console.log('Height is UNDEFINED');
+}
+
+// false porque height es undefined y es un falsy
+
+*/
+
+// * Equality operators: == & ===
+
+/*
+const age = '18';
+
+if (age === 18) console.log('You just became an adult :D');
+
+if (age == 18) console.log('You just became an adult :D (loose)');
+
+
+const favourite = Number(prompt("What's your favourite number?"));
+console.log(favourite);
+console.log(typeof (favourite));
+
+if (favourite === 23) {
+  console.log('Cool! 23 is an amazing number!');
+} else if (favourite === 7) {
+  console.log('7 is also a cool number');
+} else if (favourite === 9) {
+  console.log('9 is also a cool number');
+} else {
+  console.log('Number isnt 23, 9 or 7');
+}
+
+if (favourite !== 23) console.log('Why not 23?');
+
+*/
+
+// * Boolean logic
+
+//! AND OR & NOT
+
+const hasDriverLicense = true; // A
+const hasGoodVision = true; // B
+
+
+console.log(hasDriverLicense && hasGoodVision);
+console.log(hasDriverLicense || hasGoodVision);
+console.log(!hasDriverLicense);
+
+
+// if (hasDriverLicense && hasGoodVision) {
+//   console.log('Sarah is able to drive!');
+// } else {
+//   console.log('Someone else should drive...');
+// }
+
+const isTired = false; // C
+
+console.log(hasDriverLicense && hasGoodVision && !isTired);
+
+if (hasDriverLicense && hasGoodVision && !isTired) {
+  console.log('Sarah is able to drive!');
+} else {
+  console.log('Someone else should drive...');
+}
+
+
