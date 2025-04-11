@@ -45,3 +45,5 @@ describePopulation = (country, population) => {
 
 console.log(describePopulation('Chile', 19));
 
+//* Array
+

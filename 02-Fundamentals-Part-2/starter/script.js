@@ -12,7 +12,7 @@ if (hasDriversLicense) console.log('i can drive :D');
 // const interface = 'Audio';
 // const private = 534;
 
-*/
+
 
 //* Functions
 
@@ -25,17 +25,17 @@ logger();
 logger();
 
 
-// function fruitProcessor(apples, oranges) {
-//   const juice = `Juice whit ${apples} apples and ${oranges} oranges`;
+ function fruitProcessor(apples, oranges) {
+   const juice = `Juice whit ${apples} apples and ${oranges} oranges`;
 
-//   return juice;
-// }
+   return juice;
+ }
 
-// const appleJuice = fruitProcessor(5, 0);
-// const appleOrangeJuice = fruitProcessor(2, 4);
+ const appleJuice = fruitProcessor(5, 0);
+ const appleOrangeJuice = fruitProcessor(2, 4);
 
-// console.log(appleJuice);
-// console.log(appleOrangeJuice);
+ console.log(appleJuice);
+ console.log(appleOrangeJuice);
 
 
 //* Function declarations vs expressions
@@ -65,16 +65,16 @@ const age3 = calcAge3(2000);
 console.log(age1, age2, age3);
 
 
-// const yearUntilRetirement = (birthYear, firstName) => {
-//   const age = 2025 - birthYear;
-//   const retirement = 65 - age;
-//   // return retirement;
+ const yearUntilRetirement = (birthYear, firstName) => {
+   const age = 2025 - birthYear;
+   const retirement = 65 - age;
+   // return retirement;
 
-//   return `${firstName} retires in ${retirement} years`
-// }
+   return `${firstName} retires in ${retirement} years`
+ }
 
-// console.log(yearUntilRetirement(2000, 'Erwin'));
-// console.log(yearUntilRetirement(2001, 'Nicolas'));
+ console.log(yearUntilRetirement(2000, 'Erwin'));
+ console.log(yearUntilRetirement(2001, 'Nicolas'));
 
 
 //* Function into another function
@@ -97,30 +97,30 @@ console.log(fruitProcessor(2, 3));
 
 //* Reviewing function
 
-// const calcAge = function (birthYear) {
-//   return 2025 - birthYear;
-// }
+const calcAge = function (birthYear) {
+  return 2025 - birthYear;
+}
 
 
-// const yearUntilRetirement = function (birthYear, firstName) {
-//   const age = calcAge(birthYear);
-//   const retirement = 65 - age;
+const yearUntilRetirement = function (birthYear, firstName) {
+  const age = calcAge(birthYear);
+  const retirement = 65 - age;
 
-//   if (retirement > 0) {
-//     console.log(`${firstName} retires in ${retirement} years`);
-//     return retirement
-//   } else {
-//     console.log(`${firstName} has already retired 🎉`);
-//     return -1;
-//   }
+  if (retirement > 0) {
+    console.log(`${firstName} retires in ${retirement} years`);
+    return retirement
+  } else {
+    console.log(`${firstName} has already retired 🎉`);
+    return -1;
+  }
 
-//   return retirement;
+  return retirement;
 
-// }
+}
 
 
-// console.log(yearUntilRetirement(2000, 'Erwin'));
-// console.log(yearUntilRetirement(1920, 'Nicolas'));
+console.log(yearUntilRetirement(2000, 'Erwin'));
+console.log(yearUntilRetirement(1920, 'Nicolas'));
 
 //* Arrays
 
@@ -165,3 +165,149 @@ const ages = [calcAge(years[0]), calcAge(years[1]), calcAge(years[years.length -
 
 console.log(ages);
 
+
+//! Array methods
+
+
+//! Addinng elements
+
+// Last
+const friends = ['Michael', 'Steven', 'Peter'];
+const newLength = friends.push('Jay');
+console.log(friends);
+console.log(newLength);
+
+//First element
+friends.unshift('John');
+console.log(friends);
+
+
+//! Removing elements
+
+// Last element
+friends.pop();
+const popped = friends.pop();
+console.log(popped);
+console.log(friends);
+
+// First element
+friends.shift();
+console.log(friends);
+
+// Searching index by the element value (return pos or -1 if didnt exist)
+
+console.log(friends.indexOf('Steven')); // 1
+console.log(friends.indexOf('Bob')); // -1
+
+// Looking for a element in the array (return boolean)
+
+console.log(friends.includes('Steven'));
+console.log(friends.includes('Bob'));
+
+
+if (friends.includes('Steven')) {
+  console.log('You have a friend called Steven');
+}
+
+
+
+
+//* Objects
+
+const jonasArray = [
+  'Jonas',
+  'Schemtmann',
+  2037 - 1991,
+  'teacher',
+  ['Michael', 'Peter', 'Steven']
+];
+
+const jonas = {
+  firstName: 'Jonas',
+  lastName: 'Schmedtmann',
+  age: 2037 - 1991,
+  job: 'teacher',
+  friends: ['Michael', 'Peter', 'Steven']
+};
+
+console.log(jonas);
+
+//! Dot notation
+
+console.log(jonas.lastName);
+
+//! Bracket notation
+
+console.log(jonas['lastName']);
+
+//! The difference
+
+const nameKey = 'Name';
+
+console.log(jonas['first' + nameKey]);
+console.log(jonas['last' + nameKey]);
+
+// console.log(jonas.'last' + nameKey);  Dont work
+
+const interestedIn = prompt('What do you want to know about Jonas? Choose between firstName, lastName, age, job or friends');
+
+
+if (jonas[interestedIn]) {
+  console.log(jonas[interestedIn]);
+} else {
+  console.log('Wrong request! Choose between firstName, lastName, age, job or friends');
+}
+
+//! Adding a property to an object
+
+jonas.location = 'Portugal';
+jonas['twitter'] = '@jonasschmedtman';
+console.log(jonas);
+
+// TODO -> Challenge "Jonas has 3 friends, and his best friend is called Michael"
+
+console.log(`${jonas.firstName} has ${jonas.friends.length} friends, and his best friend is called ${jonas.friends[0]}`);
+
+*/
+
+//! Objects method
+
+
+const jonas = {
+  firstName: 'Jonas',
+  lastName: 'Schmedtmann',
+  birthYear: 1991,
+  job: 'teacher',
+  friends: ['Michael', 'Peter', 'Steven'],
+  hasDriversLicense: true,
+
+  // calcAge: function (birthYear) {
+  //   return 2037 - birthYear
+  // }
+
+
+  // calcAge: function () {
+  //   return 2037 - this.birthYear
+  // }
+
+
+  calcAge: function () {
+    this.age = 2037 - this.birthYear
+    return this.age;
+  },
+
+  getSummary: function () {
+    return `${this.firstName} is a ${this.calcAge()}-year old, and he has ${this.hasDriversLicense ? 'a' : 'no'} driver's license`
+  }
+
+};
+
+// console.log(jonas.calcAge());
+
+// console.log(jonas.age);
+// console.log(jonas.age);
+// console.log(jonas.age);
+
+// TODO > Challenge "Jonas is a 46-year old, and he has a/no driver's license"
+
+console.log(jonas.getSummary());
