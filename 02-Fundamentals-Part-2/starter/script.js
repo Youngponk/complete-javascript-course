@@ -268,7 +268,6 @@ console.log(jonas);
 
 console.log(`${jonas.firstName} has ${jonas.friends.length} friends, and his best friend is called ${jonas.friends[0]}`);
 
-*/
 
 //! Objects method
 
@@ -311,3 +310,39 @@ const jonas = {
 // TODO > Challenge "Jonas is a 46-year old, and he has a/no driver's license"
 
 console.log(jonas.getSummary());
+
+//* Iteration: the for loop
+
+// console.log('Lifting weights repetition 1 🏋🏽‍♀️');
+// console.log('Lifting weights repetition 2 🏋🏽‍♀️');
+// console.log('Lifting weights repetition 3 🏋🏽‍♀️');
+// console.log('Lifting weights repetition 4 🏋🏽‍♀️');
+// console.log('Lifting weights repetition 5 🏋🏽‍♀️');
+// console.log('Lifting weights repetition 6 🏋🏽‍♀️');
+// console.log('Lifting weights repetition 7 🏋🏽‍♀️');
+// console.log('Lifting weights repetition 8 🏋🏽‍♀️');
+// console.log('Lifting weights repetition 9 🏋🏽‍♀️');
+// console.log('Lifting weights repetition 10 🏋🏽‍♀️');
+
+
+// for loop keeps runnig while conditions is TRUE
+for (let rep = 1; rep <= 10; rep++) {
+  console.log(`Lifting weights repetition ${rep} 🏋🏽‍♀️`);
+}
+
+*/
+
+
+//* Looping arrays, breaking and continue
+
+const jonasArray = [
+  'Jonas',
+  'Schemtmann',
+  2037 - 1991,
+  'teacher',
+  ['Michael', 'Peter', 'Steven']
+];
+
+for (let i = 0; i < jonasArray.length; i++) {
+  console.log(jonasArray[i], typeof jonasArray[i]);
+}
