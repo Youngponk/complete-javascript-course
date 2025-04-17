@@ -417,4 +417,25 @@ for (let exercise = 1; exercise < 4; exercise++) {
 
 //* While loop
 
+// for (let rep = 1; rep <= 10; rep++) {
+//   console.log(`Lifting weights repetition ${rep} 🏋🏽‍♀️`);
+// }
 
+
+// let rep = 1;
+// while (rep <= 10) {
+//   console.log(`Lifting weights repetition ${rep} 🏋🏽‍♀️`);
+//   rep++
+// }
+
+
+//! Roll dice while loop
+
+let dice = Math.trunc(Math.random() * 6) + 1;
+console.log(dice);
+
+while (dice !== 6) {
+  console.log(`You got the number: ${dice}`);
+  dice = Math.trunc(Math.random() * 6) + 1;
+  if (dice === 6) console.log('You got 6 !');
+}
