@@ -213,10 +213,70 @@ console.log(arrayDiff([1, 2, 2, 2, 3], [2])); // [1, 3]
 
 
 
-*/
 
 var isSquare = function (n) {
   number = Math.trunc(Math.sqrt(n));
   if (number * number === n) return true;
   if (number * number !== n) return false;
 };
+
+
+function twoSum(numbers, target) {
+  //?  Recibe un array con números
+  //? Debe retornar los indices de los números que sumados sean el target
+  let x = 0;
+  let sum = 0;
+  
+  for (i = 0; i < numbers.length; i++) {
+    sum += numbers[i]; // 1
+    for (let j = 0; j < numbers.length - 1; j++) {
+      sum += numbers[j + 1]; // 2
+      console.log(`Suma = ${sum} / iteración ${i} / indices ${i}, ${j}`);
+      if (sum === target) {
+        return `[${i}, ${j}]`;
+      } else {
+        sum = 0;
+    }
+  }
+}
+}
+
+
+function twoSum(numbers, target) {
+  if (numbers.length < 2) return NaN;
+  
+  let sum = 0;
+  
+  for (i = 0; i < numbers.length; i++) {
+    sum += numbers[i];
+    for (let j = 0; j < numbers.length; j++) {
+      if (i === j) continue;
+      sum += numbers[j];
+      
+      if (sum === target) {
+        return `[${i}, ${j}]`;
+      } else {
+        sum = numbers[i];
+    }
+  }
+}
+}
+
+*/
+
+function twoSum(numbers, target) {
+  for (let i = 0; i < numbers.length; i++) {
+    for (let j = i + 1; j < numbers.length; j++) {
+      if (numbers[i] + numbers[j] === target) {
+        return [i, j];
+      }
+    }
+  }
+  return null; // o undefined o []
+}
+
+console.log(twoSum([1, 2, 3], 4));
+console.log(twoSum([3, 2, 4], 6));
+console.log(twoSum([1234, 5678, 9012], 14690));
+console.log(twoSum([2, 2, 3], 4));
+console.log(twoSum([2, 3, 1], 3));
