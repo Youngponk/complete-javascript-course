@@ -13,15 +13,40 @@ const btnNew = document.querySelector('.btn--new');
 const btnRoll = document.querySelector('.btn--roll');
 const btnHold = document.querySelector('.btn--hold');
 
+let scores, currentScore, activePlayer, playing;
+
 // Starting coditions
+const init = function () {
+  //? Hide the dice
+  diceEl.classList.add('hidden');
+  //? Reset every variable
+  scores = [0, 0];
+  currentScore = 0;
+  activePlayer = 0;
+  playing = true;
+
+  currentScore0El.textContent = 0;
+  currentScore1El.textContent = 0;
+  score0El.textContent = 0;
+  score1El.textContent = 0;
+
+  //? Reset active player
+  document
+    .querySelector(`.player--${activePlayer}`)
+    .classList.remove('player--active');
+  //? Reset win mark
+  document
+    .querySelector(`.player--${activePlayer}`)
+    .classList.remove('player--winner');
+
+  //? Choose the player 0 as starter
+  activePlayer = 0;
+  document.querySelector('.player--0').classList.add('player--active');
+};
+
 score0El.textContent = 0;
 score1El.textContent = 0;
 diceEl.classList.add('hidden');
-
-let scores = [0, 0];
-let currentScore = 0;
-let activePlayer = 0; //player 1  = 0 / player 2 = 2
-let playing = true;
 
 // Switch players function
 
@@ -97,27 +122,8 @@ btnHold.addEventListener('click', function () {
   }
 });
 
-btnNew.addEventListener('click', function () {
-  //? Hide the dice
-  diceEl.classList.add('hidden');
-  //? Reset points
-  scores = [0, 0];
-  currentScore0El.textContent = 0;
-  currentScore1El.textContent = 0;
-  score0El.textContent = 0;
-  score1El.textContent = 0;
-  //? Reset active player
-  document
-    .querySelector(`.player--${activePlayer}`)
-    .classList.remove('player--active');
-  //? Reset win mark
-  document
-    .querySelector(`.player--${activePlayer}`)
-    .classList.remove('player--winner');
-  //? Reset game state
-  playing = true;
+// New game function
 
-  //? Choose the player 0 as starter
-  activePlayer = 0;
-  document.querySelector('.player--0').classList.add('player--active');
+btnNew.addEventListener('click', function () {
+  init();
 });
