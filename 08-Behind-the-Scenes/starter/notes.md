@@ -83,3 +83,48 @@ Lugar donde se apilan los diferentes contextos uno arriba del otro, seguimiento 
 ## Hoisting
 
 Hace que ciertos tipos de variables sean accesibles o usables en el código antes de que sean declarados.
+
+## Lifecycle de la memoria
+
+La memoría en JS se almacena de forma automatica detrás de todo
+
+Cada valor que creamos en js pasa a través de un lifecycle
+
+1. Allocate memory (Asignación de memoria)
+
+let temp = 23.7;
+
+Cada vez que se asigna un valor a una variable el motor automáticamente reserva ese pedazo de memoria.
+
+2. Use memory (Uso de memoria)
+
+temp = temp + 5;
+round(temp);
+
+Cuando el código se corre, el valor es escrito, leeido y modificado en la memoria asignada.
+
+3. Release memory (Liberación de memoria)
+
+temp is removed from memory
+
+Cuando no sea necesaria la memoria el valor es eliminado de la memoria.
+
+## Donde es designada la memoria
+
+Esta ubicada en diferentes partes de la memoria de JavaScript, esto dependiendo del tipo de datos.
+
+-     Primitives: Number, String, Boolean, Undefined, Null, Symbol, BigInt and References to objects
+-     Objects: Object literals, Arrays, Functions, Many more...
+
+Todos los valores primitivos son almacenados en el Call Stack (Pila), mientras que los valores de tipo Objeto son almacenados en el Heap(monton)
+
+## Cómo se elimina la memoria
+
+1. Call stack memory: Variables de entorno simplemente se eliminan cuando se dejan de usar
+
+2. Heap memory: Se usa el modelo de Garbage collection
+
+-     Mark: Marca todos los objetos que son alcanzables (Se estan ejecutando) desde la raiz.
+-     Sweep: Elimina los objetos que no estan marcados y libera la memoria para una nueva asignación de esta.
+
+Esto ocurre mientras la funcion, active event, closure or objeto aun esta ejecutandose, cuando termina se debe eliminar automaticamente a través de este proceso.
