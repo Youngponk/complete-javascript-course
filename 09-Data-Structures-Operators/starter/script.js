@@ -127,6 +127,59 @@ const game = {
     team2: 6.5,
   },
 };
+
+///////////////////////////////////////
+//! Coding Challenge #4
+
+// Write a program that receives a list of variable names written in underscore_case and convert them to camelCase.
+
+// The input will come from a textarea inserted into the DOM (see code below), and conversion will happen when the button is pressed.
+
+// THIS TEST DATA (pasted to textarea)
+// underscore_case
+//  first_name
+// Some_Variable
+//   calculate_AGE
+// delayed_departure
+
+// SHOULD PRODUCE THIS OUTPUT (5 separate console.log outputs)
+// underscoreCase      ✅
+// firstName           ✅✅
+// someVariable        ✅✅✅
+// calculateAge        ✅✅✅✅
+// delayedDeparture    ✅✅✅✅✅
+
+// HINT 1: Remember which character defines a new line in the textarea 😉
+// HINT 2: The solution only needs to work for a variable made out of 2 words, like a_b
+// HINT 3: Start without worrying about the ✅. Tackle that only after you have the variable name conversion working 😉
+// HINT 4: This challenge is difficult on purpose, so start watching the solution in case you're stuck. Then pause and continue!
+
+// Afterwards, test with your own test data!
+
+// GOOD LUCK 😀
+
+function convertFunction() {
+  let textarea = document.getElementById('textarea');
+
+  let str = textarea.value;
+
+  //? Pasar todo a  minuscula
+  str.toLowerCase();
+  console.log(str);
+
+  //? Separar las palabras por el separador
+
+  //? Trabajar con cada palabra por separado
+
+  /*
+  underscore_case -> underscoreCase
+  first_name -> firstName
+  */
+
+  textarea.value = '';
+}
+
+/*
 //* WORKING WHIT STRINGS - PT3
 
 // Split and join
@@ -184,10 +237,33 @@ capitalizeName('isidora martina castillo perez');
 // Padding -> relleno
 
 const msg = 'Go to gate 23!';
-console.log(msg.padStart(25, '+').padEnd(35, '+'));
-console.log('Jonas'.padStart(25, '+'));
+console.log(msg.padStart(20, '+').padEnd(30, '+'));
+console.log('Jonas'.padStart(20, '+').padEnd(30, '+'));
 
-/*
+//! Doing a mask credit card function to hide the number card's
+
+const maskCreditCard = function (number) {
+  const str = number + ''; //? -> fast way to convert number to string
+  const last = str.slice(-4);
+
+  return last.padStart(str.length, '*');
+};
+
+console.log(maskCreditCard(12311234));
+console.log(maskCreditCard(1234123412341234));
+console.log(maskCreditCard('12345123562345672'));
+
+// Repeat
+
+const message2 = 'Bad weather... All Departues Delayed...|||';
+console.log(message2.repeat(5));
+
+const planesInLine = function (n) {
+  console.log(`There are ${n} planes in the  ${'🛩️ '.repeat(n)}`);
+};
+
+planesInLine(10);
+
 //* WORKING WHIT STRINGS - PT2
 
 const airline = 'Tap Air Portugal';
