@@ -127,6 +127,378 @@ const game = {
     team2: 6.5,
   },
 };
+//* WORKING WHIT STRINGS - PT3
+
+// Split and join
+
+console.log('a+very+nice+string'.split('+'));
+console.log('Erwin Chavez'.split(' '));
+
+const [firstName, lastName] = 'Erwin Chavez'.split(' ');
+console.log(firstName, lastName);
+
+const newName = ['Mr.', firstName, lastName.toUpperCase()].join(' ');
+console.log(newName);
+
+//! Capitalize whit join and split
+
+// My solution
+
+// const capitalizeName = function (name) {
+//   const names = name.split(' ');
+//   let str = '';
+//   for (let i = 0; i < names.length; i++) {
+//     str += names[i][0].toUpperCase() + names[i].slice(1) + ' ';
+//   }
+//   console.log(str);
+// };
+
+//! John solution
+
+// const capitalizeName = function (name) {
+//   const names = name.split(' ');
+//   const namesUpper = [];
+
+//   for (const n of names) {
+//     namesUpper.push(n[0].toUpperCase() + n.slice(1));
+//   }
+//   console.log(namesUpper.join(' '));
+// };
+
+//! John challenge
+
+const capitalizeName = function (name) {
+  const names = name.split(' ');
+  const namesUpper = [];
+
+  for (const n of names) {
+    // namesUpper.push(n[0].toUpperCase() + n.slice(1));
+    namesUpper.push(n.replace(n[0], n[0].toUpperCase()));
+  }
+  console.log(namesUpper.join(' '));
+};
+
+capitalizeName('jessica ann smith davis');
+capitalizeName('isidora martina castillo perez');
+
+// Padding -> relleno
+
+const msg = 'Go to gate 23!';
+console.log(msg.padStart(25, '+').padEnd(35, '+'));
+console.log('Jonas'.padStart(25, '+'));
+
+/*
+//* WORKING WHIT STRINGS - PT2
+
+const airline = 'Tap Air Portugal';
+console.log(airline.toLowerCase());
+console.log(airline.toUpperCase());
+
+// Fix capitalization in name
+
+let passenger = 'eRwIn'; // Expected -> Erwin
+
+passenger = passenger.toLowerCase(); // erwin
+passenger = passenger[0].toUpperCase() + passenger.slice(1); // Erwin
+
+console.log(passenger);
+
+// Comparing Emails
+
+const email = 'hello@erwin.io';
+const loginEmail = ' Hello@Erwin.Io \n';
+
+const lowerEmail = loginEmail.toLowerCase();
+const trimmedEmail = lowerEmail.trim(); // -> delete white spaces
+console.log(trimmedEmail === email); // true
+
+const normalizedEmail =
+  email === loginEmail.toLowerCase().trim()
+    ? 'Los emails son iguales'
+    : 'Los mails son diferentes';
+console.log(normalizedEmail); // Los emails son iguales
+
+// replacing
+const priceGB = '288,97€';
+const priceUS = priceGB.replace('€', '$').replace(',', '.');
+console.log(priceUS); // '288.97$'
+
+const announcement =
+  'All passengers come to boarding door 23. Boarding door 23!';
+console.log(announcement);
+console.log(announcement.replace('door', 'gate'));
+// console.log(announcement.replaceAll('door', 'gate'));
+
+console.log(announcement.replace(/door/g, 'gate')); // All passengers come to boarding gate 23. Boarding gate 23!
+
+// Booleans
+
+const plane = 'Airbus A320neo';
+console.log(plane.includes('A320neo')); // true
+console.log(plane.includes('Boeing')); // false
+console.log(plane.startsWith('Air')); // true
+
+if (plane.startsWith('Airbus') && plane.endsWith('neo')) {
+  console.log('Part of the NEW airbus family');
+}
+
+// Practice exercise
+
+const checkBaggage = function (items) {
+  let baggage = items.toLowerCase();
+  if (baggage.includes('knife') || baggage.includes('gun')) {
+    console.log('You are NOT allowed on board');
+  } else {
+    console.log(`You're Welcome aboard!`);
+  }
+};
+
+checkBaggage('I have a laptop, some fof and a pocket knife');
+checkBaggage('Socks and camera');
+checkBaggage('Got some snacks and a gun for protection');
+
+//* WORKING WHIT STRINGS - PT1
+
+const airline = 'Tap Air Portugal';
+const plane = 'A320';
+
+console.log(plane[0]);
+console.log(plane[1]);
+console.log(plane[2]);
+console.log('B737'[0]);
+console.log(airline.length);
+console.log('B737'.length);
+
+//? String methods
+
+// Index
+console.log(airline.indexOf('r'));
+console.log(airline.lastIndexOf('r'));
+console.log(airline.indexOf('Portugal'));
+
+// Slice -> corta y almacena el valor
+
+console.log(airline.slice(4));
+console.log(airline.slice(4, 7)); // -> Index desde el que parte y en el que corta la palabra
+
+console.log(airline.slice(0, airline.indexOf(' ')));
+console.log(airline.slice(airline.lastIndexOf(' ') + 1, airline.length));
+
+console.log(airline.slice(1, -1));
+
+const checkMiddleSeat = function (seat) {
+  // A B C Pasillo D E F
+
+  const s =
+    seat.indexOf('B') !== -1 || seat.indexOf('E') !== -1
+      ? 'Middle Seat!'
+      : 'Not a middle seat';
+  console.log(s);
+};
+
+checkMiddleSeat('11B');
+checkMiddleSeat('23C');
+checkMiddleSeat('3E');
+
+console.log(new String('Erwin'));
+console.log(typeof new String('Erwin'));
+console.log(typeof new String('Erwin').slice(1));
+
+//! //////////////////////////
+//! Coding Challenge #3
+
+const gameEvents = new Map([
+  [17, '⚽️ GOAL'],
+  [36, '🔁 Substitution'],
+  [47, '⚽️ GOAL'],
+  [61, '🔁 Substitution'],
+  [64, '🔶 Yellow card'],
+  [69, '🔴 Red card'],
+  [70, '🔁 Substitution'],
+  [72, '🔁 Substitution'],
+  [76, '⚽️ GOAL'],
+  [80, '⚽️ GOAL'],
+  [92, '🔶 Yellow card'],
+]);
+
+//Let's continue with our football betting app! This time, we have a map with a log of the events that happened during the game. The values are the events themselves, and the mins are the minutes in which each event happened (a football game has 90 minutes plus some extra time).
+
+//1. Create an array 'events' of the different game events that happened (no duplicates)
+
+const events = [...new Set(gameEvents.values())];
+console.log(events);
+
+//2. After the game has finished, is was found that the yellow card from minute 64 was unfair. So remove this event from the game events log.
+
+gameEvents.delete(64);
+console.log(gameEvents);
+
+//3. Print the following string to the console: "An event happened, on average, every 9 minutes" (keep in mind that a game has 90 minutes)
+
+const time = [...gameEvents.keys()];
+console.log(time);
+
+console.log(
+  `An event happened, on average, every ${
+    time[time.length - 1] / gameEvents.size
+  } minutes`
+);
+
+//4. Loop over the events and log them to the console, marking whether it's in the first half or second half (after 45 min) of the game, like this:
+//      [FIRST HALF] 17: ⚽️ GOAL
+
+for (const [min, value] of gameEvents) {
+  console.log(
+    `${min <= 45 ? '[FIRST HALF]' : '[SECOND HALF]'} ${min}: ${value}`
+  );
+}
+
+// GOOD LUCK 😀
+
+//! WICH DATA STRUCTURE TO USE !?
+
+//? Source of data -> 1. From te program 2. From the UI (DOM interactions) 3. From external resources (APIs)
+
+//? Data structure -> Arrays, Objects, Sets, Map
+
+//? Simple List -> Arrays and Sets
+//? min/Value Pairs -> Objects and Maps
+
+//! Arrays vs Sets
+
+//? Arrays
+
+// Usar cuando necesitas una lista de valores ordenadas, no importan los duplicados y necesitas manipular los datos.
+
+const tasks = ['Code', 'Eat', 'Code'];
+console.log(tasks); // ['Code', 'Eat', 'Code']
+
+//? Sets
+
+// Usar cuando se necesita trabajar con valores únicos, usar cuando high-performance es necesario o cuando se necesita eliminar duplicados
+
+const tasks2 = new Set(['Code', 'Eat', 'Code']);
+console.log(tasks2); // Set {'Code', 'Eat'}
+
+//! Objects vs Maps
+
+//? Objets
+
+// Uso tradicional de almacenamiento min/value, facil de escribir y acceder con '.' y []
+
+const task3 = {
+  task: 'Code',
+  date: 'today',
+  repeat: true,
+};
+
+//? Maps
+
+// Mejor performance
+// min pueden tener cualquier tipo de datos
+// Fácil de iterar
+// Facil de obtener el size
+
+const task4 = new Map([
+  ['task', 'Code'],
+  ['date', 'today'],
+  [false, 'Start coding!'],
+]);
+
+//* Maps -> iteration
+
+const question = new Map([
+  ['question', 'What is the best programming language in the world?'],
+  [1, 'C'],
+  [2, 'Java'],
+  [3, 'JavaScript'],
+  ['correct', 3],
+  [true, 'Correct🎉'],
+  [false, 'Try again!'],
+]);
+
+console.log(question);
+
+//? Convert object to map
+
+console.log(Object.entries(openingHours));
+const hoursMap = new Map(Object.entries(openingHours));
+console.log(hoursMap);
+
+//? Iteration
+
+//! Quizz app
+
+console.log(question.get('question'));
+
+for (const [min, value] of question) {
+  if (typeof min === 'number') console.log(`Answer ${min}: ${value}`);
+}
+
+const answer = Number(prompt('Your answer'));
+console.log(question.get(answer === question.get('correct')));
+
+//? Convert map to array
+
+console.log([...question]);
+// console.log(question.entries());
+console.log(...question.mins());
+console.log(...question.values());
+
+//* Maps -> Fundamentals
+//? Estructura de datos
+
+const rest = new Map();
+
+//? Adding values to the map
+
+rest.set('name', 'Classico Italiano');
+rest.set(1, 'Firenze, Italy');
+rest.set(2, 'Lisbon, Portugal'); // set return the map
+rest
+  .set('categories', ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'])
+  .set('open', 11)
+  .set('close', 23)
+  .set(true, 'We are open :D')
+  .set(false, 'We are closed :(');
+
+//? Getting values from a map
+
+console.log(rest.get('name'));
+console.log(rest.get(true));
+console.log(rest.get(1));
+
+console.log(rest);
+
+const time = 8;
+console.log(rest.get(time > rest.get('open') && time < rest.get('close'))); // We are closed :(
+
+//? Checking values in maps
+
+console.log(rest.has('categories')); // True
+
+//? Delete the value whit the min
+
+rest.delete(2);
+console.log(rest);
+
+//? Size of map
+
+console.log(rest.size); // 7
+
+//? Removing all the values
+
+// rest.clear();
+
+//? Using objects and arrays as mins
+
+const arr = [1, 2];
+
+rest.set(arr, 'Test');
+rest.set(document.querySelector('h1'), 'heading');
+console.log(rest);
+console.log(rest.get(arr));
+
 
 //* Sets (Conjuntos)
 //? No tiene duplicados
@@ -166,7 +538,39 @@ console.log(staffUnique);
 
 console.log(new Set('erwinchavez').size);
 
-/*
+//! 7 More metodos para los Sets
+
+// const uniqueFood = [new Set([...mexicanFoods, ...italianFoods])];
+//? Si necesitamos unir 2 set con elementos que se repiten en los dos
+
+const commonFoods = italianFoods.intersection(mexicanFoods);
+console.log('Intersection:', commonFoods);
+console.log([...commonFoods]);
+
+//? Todos los elementos que estan en los dos sets pero sin duplicarlos
+
+const italianMexicanFusion = italianFoods.union(mexicanFoods);
+console.log(italianMexicanFusion);
+console.log([...italianMexicanFusion]);
+
+console.log([...new Set([...italianFoods, ...mexicanFoods])]);
+
+//? Entrega un nuevo set que contiene todos los elementos que estan en el primer set y no en el segundo
+
+const uniqueItalianFoods = italianFoods.difference(mexicanFoods);
+console.log('Italian unique: ', [...uniqueItalianFoods]);
+
+const uniqueMexicanFoods = mexicanFoods.difference(italianFoods);
+console.log('Mexican unique: ', [...uniqueMexicanFoods]);
+
+//? Nos entrega la diferencia entre dos sets de
+
+const uniqueItalianAndMexicanFood =
+  italianFoods.symmetricDifference(mexicanFoods);
+console.log([...uniqueItalianAndMexicanFood]);
+
+console.log(italianFoods.isDisjointFrom(mexicanFoods));
+
 ///////////////////////////////////////
 //! Coding Challenge #2
 
@@ -221,10 +625,10 @@ console.log(scorers);
 
 //GOOD LUCK 😀
 
-//* Looping Objects: Objects keys, values and entries
+//* Looping Objects: Objects mins, values and entries
 
 //? Properties names
-const properties = Object.keys(openingHours);
+const properties = Object.mins(openingHours);
 console.log(properties);
 
 let openStr = `We are open on ${properties.length} days: `;
@@ -245,8 +649,8 @@ const entries = Object.entries(openingHours);
 console.log(entries);
 
 
-for (const [key, { open, close }] of entries) {
-  console.log(`on ${key} we open at ${open} and close at ${close}`);
+for (const [min, { open, close }] of entries) {
+  console.log(`on ${min} we open at ${open} and close at ${close}`);
 }
 
 
