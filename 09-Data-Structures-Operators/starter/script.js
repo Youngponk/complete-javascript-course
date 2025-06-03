@@ -136,11 +136,26 @@ const game = {
 // The input will come from a textarea inserted into the DOM (see code below), and conversion will happen when the button is pressed.
 
 // THIS TEST DATA (pasted to textarea)
-// underscore_case
-//  first_name
-// Some_Variable
-//   calculate_AGE
-// delayed_departure
+// underscore_case;
+// first_name;
+// Some_Variable;
+// calculate_AGE;
+// delayed_departure;
+
+/*
+
+underscore_case
+ first_name
+Some_Variable
+  calculate_AGE
+delayed_departure
+
+let passenger = 'eRwIn'; // Expected -> Erwin
+
+passenger = passenger.toLowerCase(); // erwin
+passenger = passenger[0].toUpperCase() + passenger.slice(1); // Erwin
+
+*/
 
 // SHOULD PRODUCE THIS OUTPUT (5 separate console.log outputs)
 // underscoreCase      ✅
@@ -163,18 +178,31 @@ function convertFunction() {
 
   let str = textarea.value;
 
-  //? Pasar todo a  minuscula
-  str.toLowerCase();
-  console.log(str);
-
   //? Separar las palabras por el separador
+  const words = str.split('\n');
 
-  //? Trabajar con cada palabra por separado
+  for (let i = 0; i < words.length; i++) {
+    //? Pasar todo a  minuscula y normalizar
+    let word = words[i].toLowerCase().trim();
 
-  /*
-  underscore_case -> underscoreCase
-  first_name -> firstName
-  */
+    for (let j = 0; j < word.length; j++) {
+      if (word[j] === '_') {
+        console.log(j);
+        word = word.replace('_', `${word[j + 1].toUpperCase()}`);
+        word = word.replace(word[j + 1], ' ');
+        // airline.slice(airline.lastIndexOf(' ') + 1, airline.length);
+        // word[j].replace('_', word[j + 1].toUpperCase());
+      }
+    }
+
+    console.log(word);
+    console.log(words);
+
+    // words[i] = word;
+    //? quitarle el underscore
+
+    // underscore_case
+  }
 
   textarea.value = '';
 }
