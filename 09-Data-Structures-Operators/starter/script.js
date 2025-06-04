@@ -128,7 +128,19 @@ const game = {
   },
 };
 
-///////////////////////////////////////
+///////////////////////////////////////////
+// String Methods Practice
+
+const vuelos =
+  '_Delayed_Departure;fao93766109;txl2133758440;11:25+_Arrival;bru0943384722;fao93766109;11:45+_Delayed_Arrival;hel7439299980;fao93766109;12:05+_Departure;fao93766109;lis2323639855;12:30';
+
+// 🔴 Delayed Departure from FAO to TXL (11h25)
+//              Arrival from BRU to FAO (11h45)
+//   🔴 Delayed Arrival from HEL to FAO (12h05)
+//            Departure from FAO to LIS (12h30)
+
+/*
+  ///////////////////////////////////////
 //! Coding Challenge #4
 
 // Write a program that receives a list of variable names written in underscore_case and convert them to camelCase.
@@ -142,20 +154,13 @@ const game = {
 // calculate_AGE;
 // delayed_departure;
 
-/*
-
-underscore_case
- first_name
-Some_Variable
-  calculate_AGE
-delayed_departure
-
-let passenger = 'eRwIn'; // Expected -> Erwin
-
-passenger = passenger.toLowerCase(); // erwin
-passenger = passenger[0].toUpperCase() + passenger.slice(1); // Erwin
-
-*/
+    
+    
+    let passenger = 'eRwIn'; // Expected -> Erwin
+    
+    passenger = passenger.toLowerCase(); // erwin
+    passenger = passenger[0].toUpperCase() + passenger.slice(1); // Erwin
+    
 
 // SHOULD PRODUCE THIS OUTPUT (5 separate console.log outputs)
 // underscoreCase      ✅
@@ -173,33 +178,59 @@ passenger = passenger[0].toUpperCase() + passenger.slice(1); // Erwin
 
 // GOOD LUCK 😀
 
-function convertFunction() {
-  let textarea = document.getElementById('textarea');
-  let str = textarea.value;
+//! My solution
 
-  //? Separar las palabras por el separador \n
-  const words = str.split('\n');
-  console.log(words); // ['underscore_case', ' first_name', 'Some_Variable', '  calculate_AGE', 'delayed_departure']
+   function convertFunction() {
+    let textarea = document.getElementById('textarea');
+    let str = textarea.value;
+    
+    //? Separar las palabras por el separador \n
+    const words = str.split('\n');
+    console.log(words); // ['underscore_case', ' first_name', 'Some_Variable', '  calculate_AGE', 'delayed_departure']
+    
+    for (let i = 0; i < words.length; i++) {
+      //? Pasar todo a  minuscula y normalizar
+      let word = words[i].toLowerCase().trim();
+      //? Separamos la palabra por _
+      let w = word.split('_');
+      
+      //? Ponemos camelcase
+      w[1] = w[1][0].toUpperCase() + w[1].slice(1);
+      w[1] = w[1].padEnd(5, ' ') + `  ${'✅'.repeat(i + 1)}`;
+      //? unimos la palabra
+      console.log(w.join(''));
+      }
+      
+      textarea.value = '';
+      
+      
+      underscore_case
+      first_name
+      Some_Variable
+      calculate_AGE
+      delayed_departure
+      }
+//! John's solution
 
-  for (let i = 0; i < words.length; i++) {
-    //? Pasar todo a  minuscula y normalizar
-    let word = words[i].toLowerCase().trim();
-    //? Separamos la palabra por _
-    let w = word.split('_');
+// document.body.append(document.createElement('textarea'));
+// document.body.append(document.createElement('button'));
+document.querySelector('button').addEventListener('click', function () {
+  const text = document.querySelector('textarea').value;
+  const rows = text.split('\n');
+  for (const [i, row] of rows.entries()) {
+    const [first, second] = row.toLowerCase().trim().split('_');
 
-    //? Ponemos camelcase
-    w[1] = w[1][0].toUpperCase() + w[1].slice(1);
+    const output = `${first}${second.replace(
+      second[0],
+      second[0].toUpperCase()
+    )}`;
 
-    //? unimos la palabra
-    console.log(w.join(''));
+    console.log(`${output.padEnd(20)}${'✅'.repeat(i + 1)}`);
   }
+});
 
-  textarea.value = '';
-}
-
-/*
 //* WORKING WHIT STRINGS - PT3
-
+           
 // Split and join
 
 console.log('a+very+nice+string'.split('+'));
