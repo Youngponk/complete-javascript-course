@@ -175,33 +175,23 @@ passenger = passenger[0].toUpperCase() + passenger.slice(1); // Erwin
 
 function convertFunction() {
   let textarea = document.getElementById('textarea');
-
   let str = textarea.value;
 
-  //? Separar las palabras por el separador
+  //? Separar las palabras por el separador \n
   const words = str.split('\n');
+  console.log(words); // ['underscore_case', ' first_name', 'Some_Variable', '  calculate_AGE', 'delayed_departure']
 
   for (let i = 0; i < words.length; i++) {
     //? Pasar todo a  minuscula y normalizar
     let word = words[i].toLowerCase().trim();
+    //? Separamos la palabra por _
+    let w = word.split('_');
 
-    for (let j = 0; j < word.length; j++) {
-      if (word[j] === '_') {
-        console.log(j);
-        word = word.replace('_', `${word[j + 1].toUpperCase()}`);
-        word = word.replace(word[j + 1], ' ');
-        // airline.slice(airline.lastIndexOf(' ') + 1, airline.length);
-        // word[j].replace('_', word[j + 1].toUpperCase());
-      }
-    }
+    //? Ponemos camelcase
+    w[1] = w[1][0].toUpperCase() + w[1].slice(1);
 
-    console.log(word);
-    console.log(words);
-
-    // words[i] = word;
-    //? quitarle el underscore
-
-    // underscore_case
+    //? unimos la palabra
+    console.log(w.join(''));
   }
 
   textarea.value = '';
