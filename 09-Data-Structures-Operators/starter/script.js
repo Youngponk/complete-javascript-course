@@ -128,8 +128,12 @@ const game = {
   },
 };
 
+/*
 ///////////////////////////////////////////
 // String Methods Practice
+
+// const vuelos =
+// '_Delayed_Departure;fao93766109;txl2133758440;11:25+_Arrival;bru0943384722;fao93766109;11:45';
 
 const vuelos =
   '_Delayed_Departure;fao93766109;txl2133758440;11:25+_Arrival;bru0943384722;fao93766109;11:45+_Delayed_Arrival;hel7439299980;fao93766109;12:05+_Departure;fao93766109;lis2323639855;12:30';
@@ -139,7 +143,56 @@ const vuelos =
 //   🔴 Delayed Arrival from HEL to FAO (12h05)
 //            Departure from FAO to LIS (12h30)
 
-/*
+
+//! My solution
+
+function flightStringMethods(vuelos) {
+  let str = '';
+  //? Separar los vuelos ✅
+  const vuelo = vuelos.split('+');
+  //? Recorrer los vuelos individualmente para manipular la data ✅
+  for (const v of vuelo) {
+    //? Destructurar el vuelo
+    const [state, from, to, time] = v.split(';');
+    //? State here✅
+    str = state.replace('_', '');
+    str = str.replace('_', ' ');
+
+    str = str.includes('Delayed') ? `🔴 ${str}` : str;
+
+    //? from and to here ✅
+
+    str += ` from ${from.slice(0, 3).toUpperCase()} to ${to
+      .slice(0, 3)
+      .toUpperCase()}`;
+
+    //?  time here ✅
+
+    str += ` (${time.replace(':', 'h')})`;
+
+    //?  Final string ✅
+    console.log(str);
+  }
+}
+
+flightStringMethods(vuelos);
+
+//! John solution
+
+const getCode = str => str.slice(0, 3).toUpperCase();
+
+for (const vuelo of vuelos.split('+')) {
+  const [type, from, to, time] = vuelo.split(';');
+  const output = `${type.startsWith('_Delayed') ? '🔴' : ''}${type.replaceAll(
+    '_',
+    ' '
+  )} ${getCode(from)} to ${getCode(to)} (${time.replace(':', 'h')})`.padStart(
+    39
+  );
+
+  console.log(output);
+}
+
   ///////////////////////////////////////
 //! Coding Challenge #4
 
