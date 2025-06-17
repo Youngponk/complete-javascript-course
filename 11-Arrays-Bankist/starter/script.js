@@ -61,6 +61,8 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+//! WORKING IN THE PROJECT
+
 //! 1) Mostrar los movimientos desde un array
 const displayMovements = function (movements) {
   //? Limpiando todo el html que hay en el container de movimientos
@@ -84,6 +86,37 @@ const displayMovements = function (movements) {
 };
 
 displayMovements(account1.movements);
+
+//! 2) Creating and Computing Usernames for the clients
+
+//? Se debe mostrar en la página web las iniciales del nombre y apellido del dueño(usuario)
+
+const createUsernames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+
+// createUsernames(accounts);
+// console.log(accounts);
+
+/* 
+? Resumen: 
+? 1. toLowerCase -> minus word
+? 2. split() -> retorna array con las palabras separadas
+? 3. map() -> recorres el array y nos devuelve un nuevo array con las iniciales
+? 4. join() -> unimos las iniciales para que retorne un string
+*/
+
+//! Calculate the balance
+
+const calcPrintBalance = function (movements) {
+  const balance = movements.reduce(acc);
+};
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -277,22 +310,72 @@ const checkDogs = function (dogsJulia, dogsKate) {
     checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
     // checkDogs([9, 16, 6, 8, 3], [10, 5, 6, 1, 4]);
     
-*/
-
+    
 //* Map method
-
+//? Retorna el array modificado por el metodo Map
+//? Return -> guardara lo que retorne en cada posición del array
 const eurToUsd = 1.1;
 
-const movementsUSD = movements.map(function (mov) {
-  // return mov * eurToUsd;
-  return 23;
-});
+// const movementsUSD = movements.map(function (mov) {
+  //   return mov * eurToUsd;
+  // })
+  
+const movementsUSD = movements.map(mov => mov * eurToUsd);
 
 console.log(movements);
 console.log(movementsUSD);
 
 const movementsUSDfor = [];
-for (const mov of movements) movementsUSDfor.push(mov * eurToUsd);
+for (const mov of movements) {
+  movementsUSDfor.push(mov * eurToUsd);
+}
 console.log(movementsUSDfor);
 
-//! WORKING IN THE PROJECT!
+const movementsDescriptions = movements.map((mov, i, arr) => {
+  return `Movement ${i + 1}: You ${
+    mov > 0 ? 'deposited' : 'withdrew'
+  } ${Math.abs(mov)}`;
+});
+  
+  console.log(movementsDescriptions);
+  
+//* Filter method
+//? Returnorna los valores considerados true dentro de la función
+// const deposits = movements.filter(function (mov) {
+  //   return mov > 0;
+  // });
+  const deposits = movements.filter(mov => mov > 0);
+  console.log(movements);
+  console.log(deposits);
+  
+  //! Another way to do it
+  const depositsFor = [];
+  for (const mov of movements) if (mov > 0) depositsFor.push(mov);
+  console.log(depositsFor);
+  
+  //! Challenge do the same thing whit the withdrawals
+  
+  const withdrawals = movements.filter(mov => mov < 0);
+  console.log(withdrawals);
+    
+*/
+//* Reduce Method
+//? Se usa para que todos los valores en un array se transformen a un solo valor
+
+console.log(movements);
+//? Acumulator -> Snowball
+// const balance = movements.reduce(function (acumulator, mov, i, arr) {
+//   console.log(`Iteration ${i}: ${acumulator}`);
+//   return acumulator + mov;
+// }, 0);
+
+const balance = movements.reduce((acumulator, mov) => acumulator + mov, 0);
+
+console.log(balance);
+
+//! Another way to do it
+
+let balance2 = 0;
+
+for (const mov of movements) balance2 += mov;
+console.log(balance2);
