@@ -64,11 +64,16 @@ const inputClosePin = document.querySelector('.form__input--pin');
 //! WORKING IN THE PROJECT
 
 //! 1) Mostrar los movimientos desde un array
-const displayMovements = function (movements) {
+//! 8) ordenando los movimientos de menor a mayor y viceversa
+const displayMovements = function (movements, sort = false) {
   //? Limpiando todo el html que hay en el container de movimientos
   containerMovements.innerHTML = '';
 
-  movements.forEach(function (mov, i) {
+  //? 8)
+
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `
@@ -76,7 +81,7 @@ const displayMovements = function (movements) {
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-        <div class="movements__value">${mov}</div>
+        <div class="movements__value">${mov}€</div>
       </div>
     `;
 
@@ -85,7 +90,7 @@ const displayMovements = function (movements) {
   });
 };
 
-displayMovements(account1.movements);
+// displayMovements(account1.movements);
 
 //! 2) Creating and Computing Usernames for the clients
 
@@ -101,7 +106,7 @@ const createUsernames = function (accs) {
   });
 };
 
-// createUsernames(accounts);
+createUsernames(accounts);
 // console.log(accounts);
 
 /* 
@@ -112,14 +117,165 @@ const createUsernames = function (accs) {
 ? 4. join() -> unimos las iniciales para que retorne un string
 */
 
-//! Calculate the balance
+//! 7) Refactorizando función para updatear UI
 
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} EUR`;
+const updateUI = function (acc) {
+  // Display movements
+  displayMovements(acc.movements);
+  // Display balance
+  calcDisplayBalance(acc);
+  // Display summary
+  calcDisplaySummary(acc);
 };
 
-calcDisplayBalance(account1.movements);
+//! 3) Calculate the balance
+
+const calcDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${acc.balance}€`;
+};
+
+// calcDisplayBalance(account1.movements);
+
+//! 4) Resumen de balance
+
+const calcDisplaySummary = function (acc) {
+  const incomes = acc.movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes}€`;
+
+  const outcomes = acc.movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov);
+  labelSumOut.textContent = `${Math.abs(outcomes)}€`;
+
+  const interests = acc.movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * acc.interestRate) / 100)
+    .filter((int, i, arr) => {
+      // console.log(arr);
+      return int >= 1;
+    })
+    .reduce((acc, int) => acc + int);
+  labelSumInterest.textContent = `${interests}€`;
+};
+
+// calcDisplaySummary(account1.movements);
+
+//! 5) Implementing login logic
+
+//? Event handler
+let currentAccount;
+
+btnLogin.addEventListener('click', function (event) {
+  //? Prevent the form from submitting the information
+  //! Esto pasa porque el btn esta dentro de una etiqueta form
+  event.preventDefault();
+
+  //? Retornar el usuario cuando el username es correcto
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+
+  console.log(currentAccount);
+
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // Display the UI and message
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    containerApp.style.opacity = 1;
+
+    updateUI(currentAccount);
+
+    // Clearing the inputs
+
+    inputLoginUsername.value = inputLoginPin.value = '';
+    inputLoginPin.blur();
+  }
+});
+
+//! 6) Transfer money to other client
+
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+
+  //? Cleaning the inputs
+  inputTransferAmount.value = '';
+  inputTransferTo.value = '';
+
+  if (
+    amount > 0 &&
+    receiverAcc &&
+    currentAccount.balance >= amount &&
+    receiverAcc?.username !== currentAccount.username
+  ) {
+    //Doing the transfer
+    currentAccount.movements.push(-amount);
+    receiverAcc.movements.push(amount);
+
+    // Update UI
+    updateUI(currentAccount);
+  }
+});
+
+//! 9) Pedir prestamo
+
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const amount = Number(inputLoanAmount.value);
+
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    // Add the movement of the loan
+    currentAccount.movements.push(amount);
+
+    // Clear inputs
+
+    inputLoanAmount.value = '';
+
+    // Update UI
+    updateUI(currentAccount);
+  }
+});
+
+//! 8) Deleting accounts
+
+btnClose.addEventListener('click', function (e) {
+  //
+  e.preventDefault();
+
+  if (
+    currentAccount.username === inputCloseUsername.value &&
+    currentAccount.pin === Number(inputClosePin.value)
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    console.log(index);
+    // Delete account
+    accounts.splice(index, 1);
+    // Hide UI
+    containerApp.style.opacity = 0;
+  }
+
+  inputClosePin.value = '';
+  inputCloseUsername.value = '';
+});
+
+//! 8b) Creating the sort btn function
+let sorted = false;
+
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -422,7 +578,6 @@ const calcAverageHumanAge = function (ages) {
 calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
 calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
 
-*/
 
 //* Chaining the methods
 //? Filter -> if array
@@ -433,11 +588,297 @@ const eurToUsd = 1.1;
 console.log(movements);
 
 const depositsUSD = movements
-  .filter(mov => mov > 0)
-  .map((mov, i, arr) => {
-    console.log(arr);
-    return mov * eurToUsd;
-  })
-  .reduce((acc, mov) => acc + mov, 0);
+.filter(mov => mov > 0)
+.map((mov, i, arr) => {
+  console.log(arr);
+  return mov * eurToUsd;
+})
+.reduce((acc, mov) => acc + mov, 0);
 
 console.log(depositsUSD);
+
+///////////////////////////////////////
+//! Coding Challenge #3
+
+Rewrite the 'calcAverageHumanAge' function from the previous challenge, but this time as an arrow function, and using chaining!
+
+TEST DATA 1: [5, 2, 4, 1, 15, 8, 3]
+TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
+
+GOOD LUCK 😀
+
+const calcAverageHumanAge = ages =>
+  ages
+.map(age => (age <= 2 ? age * 2 : 16 + age * 4))
+.filter(age => age >= 18)
+.reduce((acc, age, i, arr) => acc + age / arr.length, 0);
+
+console.log(calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]));
+console.log(calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]));
+
+
+//* Find method
+//? Retorna el primer elemento que cumpla la condición
+
+const firstWithdrawal = movements.find(mov => mov < 0);
+console.log(movements);
+console.log(firstWithdrawal);
+
+console.log(accounts);
+
+const account = accounts.find(acc => acc.owner === 'Jessica Davis');
+console.log(account);
+
+//! Another way to do it
+for (const acc of accounts)
+if (acc.owner === 'Jessica Davis') console.log(acc.owner);
+
+
+//* FindIndex method
+
+btnClose.addEventListener('click', function (e) {
+  //
+  e.preventDefault();
+  
+  if (
+    currentAccount.username === inputCloseUsername.value &&
+    currentAccount.pin === Number(inputClosePin.value)
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    console.log(index);
+    // Delete account
+    accounts.splice(index, 1);
+    // Hide UI
+    containerApp.style.opacity = 0;
+  }
+  
+  inputClosePin.value = '';
+  inputCloseUsername.value = '';
+});
+
+
+//* FindLast and FindLastIndex
+
+console.log(movements);
+const lastWithdrawal = movements.findLast(mov => mov > 1000);
+const lastWithdrawalIndex = movements.findLastIndex(mov => mov > 1000);
+console.log(lastWithdrawal, lastWithdrawalIndex); // 1300, 7
+
+//! Challenge -> 'Your latest large movement was X movements ago'
+console.log(
+  `Your latest large movements was ${
+    movements.length - movements.findLastIndex(mov => mov > 1000)
+  } movements ago`
+); // Your latest large movements was 1 movements ago
+
+
+//* Some and every method
+
+console.log(movements); // [200, 450, -400, 3000, -650, -130, 70, 1300]
+//? Includes -> Bol Revisa si existe -130
+console.log(movements.includes(-130)); // true
+
+//? some -> Bol Libertad con condiciones
+const anyDeposits = movements.some(mov => mov > 1500);
+console.log(anyDeposits); // true -> existe un movimiento mayor a 1500€
+
+//? Every -> Bol  Todos los elementos deben ser true o retornara false
+
+console.log(movements.every(mov => mov > 0));
+console.log(account4.movements.every(mov => mov > 0));
+
+//! Separate callback
+
+const deposit = mov => mov > 0;
+console.log(movements.some(deposit)); // true
+console.log(movements.every(deposit)); // false
+console.log(movements.filter(deposit)); //[200, 450, 3000, 70, 1300]
+
+//* flat and flatMap
+
+//? Flat -> Retorna el array con todos los elementos en un solo nivel
+//? Elimina los "sub-arrays"
+//? El argumento son los niveles que quieres aplanar (por defecto 1)
+const arr = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+];
+
+console.log(arr.flat()); // [1, 2, 3, 4, 5, 6, 7,8, 9]
+
+//? Flat(2) -> aplanar 2 niveles
+
+const arrDeep = [[[1, 2], 3], [4, [5, 6]], [7], 8, 9];
+
+console.log(arrDeep.flat(2));
+
+//! Practical example
+
+const overallBalance = accounts
+.flatMap(acc => acc.movements)
+.reduce((acc, mov) => acc + mov, 0);
+
+console.log(overallBalance);
+
+//? flatMap -> combina los metodos flat y map para optimizar el funcionamiento
+
+
+///////////////////////////////////////
+//! Coding Challenge #4
+
+/*
+This time, Julia and Kate are studying the activity levels of different dog breeds.
+
+YOUR TASKS:
+1. Store the the average weight of a "Husky" in a variable "huskyWeight"
+2. Find the name of the only breed that likes both "running" and "fetch" ("dogBothActivities" variable)
+3. Create an array "allActivities" of all the activities of all the dog breeds
+4. Create an array "uniqueActivities" that contains only the unique activities (no activity repetitions). HINT: Use a technique with a special data structure that we studied a few sections ago.
+5. Many dog breeds like to swim. What other activities do these dogs like? Store all the OTHER activities these breeds like to do, in a unique array called "swimmingAdjacent".
+6. Do all the breeds have an average weight of 10kg or more? Log to the console whether "true" or "false".
+7. Are there any breeds that are "active"? "Active" means that the dog has 3 or more activities. Log to the console whether "true" or "false".
+
+BONUS: What's the average weight of the heaviest breed that likes to fetch? HINT: Use the "Math.max" method along with the ... operator.
+
+TEST DATA:
+
+const breeds = [
+  {
+    breed: 'German Shepherd',
+    averageWeight: 32,
+    activities: ['fetch', 'swimming'],
+  },
+  {
+    breed: 'Dalmatian',
+    averageWeight: 24,
+    activities: ['running', 'fetch', 'agility'],
+  },
+  {
+    breed: 'Labrador',
+    averageWeight: 28,
+    activities: ['swimming', 'fetch'],
+  },
+  {
+    breed: 'Beagle',
+    averageWeight: 12,
+    activities: ['digging', 'fetch'],
+  },
+  {
+    breed: 'Husky',
+    averageWeight: 26,
+    activities: ['running', 'agility', 'swimming'],
+  },
+  {
+    breed: 'Bulldog',
+    averageWeight: 36,
+    activities: ['sleeping'],
+  },
+  {
+    breed: 'Poodle',
+    averageWeight: 18,
+    activities: ['agility', 'fetch'],
+  },
+];
+
+//? 1. Store average weigth of Husky
+
+const huskyWeight = breeds.find(breed => breed.breed === 'Husky').averageWeight;
+
+console.log(huskyWeight);
+
+//? 2. Find the name of the only breed that likes both "running" and "fetch"
+
+const findBreed = breeds.find(
+  breed =>
+    breed.activities.includes('running') && breed.activities.includes('fetch')
+).breed;
+
+console.log(findBreed);
+
+//? 3. Create an array "allActivities" of all the activities of all the dog breeds
+
+const allActivities = breeds.flatMap(breed => breed.activities);
+
+console.log(allActivities);
+
+//? 4. Create an array "uniqueActivities" that contains only the unique activities (no activity repetitions). HINT: Use a technique with a special data structure that we studied a few sections ago.
+
+const uniqueActivities = [...new Set(allActivities)];
+
+console.log(uniqueActivities);
+
+//? 5. Many dog breeds like to swim. What other activities do these dogs like? Store all the OTHER activities these breeds like to do, in a unique array called "swimmingAdjacent".
+
+const swimmingAdjacentAdd = [
+  ...new Set(
+    breeds
+    .filter(breed => breed.activities.includes('swimming'))
+    .flatMap(breed => breed.activities)
+    .filter(activity => activity !== 'swimming')
+  ),
+];
+
+console.log(swimmingAdjacentAdd);
+
+//? 6. Do all the breeds have an average weight of 10kg or more? Log to the console whether "true" or "false".
+
+console.log(breeds.every(breed => breed.averageWeight > 10));
+
+//? 7. Are there any breeds that are "active"? "Active" means that the dog has 3 or more activities. Log to the console whether "true" or "false".
+
+console.log(breeds.some(breed => breed.activities.length >= 3));
+
+//? BONUS: What's the average weight of the heaviest breed that likes to fetch? HINT: Use the "Math.max" method along with the ... operator.
+
+console.log(
+  Math.max(
+    ...breeds
+    .filter(breed => breed.activities.includes('fetch'))
+    .map(breed => breed.averageWeight)
+  )
+);
+
+
+//* Sorting arrays
+
+//? Strings
+const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+console.log(owners.sort());
+console.log(owners);
+
+//? Numbers
+
+console.log(movements);
+
+//! return < 0, A, B (keep order)
+//! return > 0, A, B (switch order)
+
+//? Ascending
+// movements.sort((a, b) => {
+  //   if (a > b) return 1;
+  //   if (a < b) return -1;
+// });
+
+//? Another way to order in Asc order
+
+movements.sort((a, b) => a - b);
+
+console.log(movements);
+
+//? Descending
+// movements.sort((a, b) => {
+//   if (a > b) return -1;
+//   if (a < b) return 1;
+// });
+
+//? Another way to order in Desc order
+movements.sort((a, b) => b - a);
+
+console.log(movements);
+
+*/
+
+//* Array Grouping
