@@ -10,6 +10,7 @@ const account1 = {
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
+  type: 'premium',
 };
 
 const account2 = {
@@ -17,6 +18,7 @@ const account2 = {
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
+  type: 'standard',
 };
 
 const account3 = {
@@ -24,6 +26,7 @@ const account3 = {
   movements: [200, -200, 340, -300, -20, 50, 400, -460],
   interestRate: 0.7,
   pin: 3333,
+  type: 'premium',
 };
 
 const account4 = {
@@ -31,6 +34,7 @@ const account4 = {
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
   pin: 4444,
+  type: 'basic',
 };
 
 const accounts = [account1, account2, account3, account4];
@@ -879,6 +883,247 @@ movements.sort((a, b) => b - a);
 
 console.log(movements);
 
-*/
 
 //* Array Grouping
+//? Sirve para agrupar/seccionar elementos de un array basados en una condición
+
+console.log(movements);
+
+const groupedMovements = Object.groupBy(movements, movement =>
+  movement > 0 ? 'deposits' : 'withdrawals'
+);
+console.log(groupedMovements);
+
+const groupedByActivity = Object.groupBy(accounts, account => {
+  const movementCount = account.movements.length;
+  
+  if (movementCount >= 8) return 'very active';
+  if (movementCount >= 4) return 'active';
+  if (movementCount >= 1) return 'moderate';
+  return 'inactive';
+});
+
+console.log(groupedByActivity);
+
+const groupedAccounts = Object.groupBy(accounts, account => account.type);
+console.log(groupedAccounts);
+
+//* More ways of creating and filling arrays
+
+console.log([1, 2, 3, 4, 5, 6, 7]);
+console.log(new Array(1, 2, 3, 4, 5, 6, 7));
+
+const x = new Array(7);
+console.log(x);
+// console.log(x.map(() => 5)); //? Intentamos rellenar el array creado con los 7 espacios vacios pero no lo hace
+
+//? Fill method -> Rellena el array con lo que le indiquemos
+//? Fill(valor, start, end);
+
+// x.fill(1);
+console.log(x); // 7, 7, 7, 7, 7, 7, 7
+x.fill(1, 3, 5);
+console.log(x);
+
+//? Mutar arrays ya existentes
+
+const arr = [1, 2, 3, 4, 5, 6, 7];
+arr.fill(23, 2, 6); //? agregar 23 desde la pos 2  a las 6
+console.log(arr); // [1, 2, 3, 4, 23, 23, 7]
+
+//? Array.from
+
+const y = Array.from({ length: 7 }, () => 1);
+console.log(y);
+
+const z = Array.from({ length: 7 }, (_, i) => i + 1);
+console.log(z);
+
+const rolldice = Array.from(
+  { length: 100 },
+  () => Math.floor(Math.random() * 6) + 1
+);
+console.log(rolldice);
+
+//! Rescatar valores desde la UI
+labelBalance.addEventListener('click', function () {
+  const movementsUI = Array.from(
+    document.querySelectorAll('.movements__value'),
+    el => Number(el.textContent.replace('€', ''))
+  );
+  console.log(movementsUI);
+
+  const movementsUI2 = [...document.querySelectorAll('.movements__value')];
+
+  console.log(movementsUI2);
+});
+
+
+//* Non-destructive alternatives -> toReverse, toSorted, toSplice
+//? Alternativas que no mutan el array original
+
+console.log(movements);
+const reversedMov = movements.toReversed();
+
+console.log(reversedMov);
+console.log(movements);
+
+// movements[1] = 2000;
+const newMovements = movements.with(1, 2000);
+console.log(newMovements);
+
+console.log(movements);
+
+//* ---------------------------------------
+//* SUMMARY: WHICH ARRAY METHOD TO USE!?  *
+//* ---------------------------------------
+
+//! TO MUTATE THE ORIGINAL ARRAY
+
+//? Add to original array
+
+// .push() -> end
+// .unshift() -> start
+
+//? Remove from original array
+
+// .pop() -> end
+// .shift() -> start
+// .splice() -> any
+
+//? Others
+
+// .reverse -> revierte el array
+// .sort -> ordena el array dependiendo de lo que le entregemos
+// .fill -> rellenamos un array con lo que entregemos en la función
+
+//! A NEW ARRAY BASED ON ORIGINAL
+
+//? Si queremos mantener el mismo largo que el array original
+
+// .map() -> loop
+
+//? Si queres filtrar bajo una condición
+// .filter() -> filtrar los elementos del array
+
+//? Queremos extraer una porción del array
+
+// .slice()
+
+//? Queremos cambiar solo un elemento
+
+//. with() -> remplazamos un elemento del array
+
+//? Aplanar los arrays dentro de este
+
+// .flat() -> indicar los niveles de aplanamiento
+// .flatMap() -> flat + map unidos
+
+//? Reversed
+// .toReversed
+
+//? Para ordenar
+// .toSorted
+
+//? Agregar o eliminar elementos del array
+// .toSplice
+
+//? Unir dos arrays
+//.concat
+
+//! Retornar el index de un array
+
+//? basado en un valor
+// .indexOf
+//? Basado en una condición
+// .findIndex
+// .findLastIndex
+
+//! Retornar un elemento del array
+
+//? Basado en una condición
+
+// .find()
+// .findLast()
+
+//? Basado en la posición
+
+//. at()
+
+//! Saber si el array incluye
+
+//? Basado en un valor
+
+//.includes()
+
+//? Basado en una condición
+
+// .some()
+// .every()
+
+//! A new string
+
+//? Basado en un separados
+
+//.join()
+
+//! Para transformar un valor
+
+//? Basado en un acumulador
+
+// .reduce() -> recorre el array para que todo se transforme a un valor
+
+//! Para recorrer un array
+
+//? Basado en una función callback
+
+// .forEach();
+
+//! Agrupar el array por categorias
+
+// .Object.groupBy
+
+//? Crear un array desde  0
+
+// .Array.from
+
+//? Crear un array desde 0 con n valores vacios (usar con .fill)
+
+// new Array(n)
+
+//? Juntar dos o más
+
+// [...arr1, ...arr2]
+
+//? Crear un array que contenga valores unicos del array origen
+
+// [...new Set(arr)]
+
+//? Crear un array que contenga elementos unicos que estén presentes en el array 1 y en el array 2
+
+// [...new Set(arr1).intersection(new set(arr2))]
+*/
+
+//* ------------------------------
+//* ARRAY METHOD PRACTICE        *
+//* ------------------------------
+
+//* 1. Suma total de los depositos
+
+const bankDepositSum = accounts
+  .flatMap(account => account.movements)
+  .filter(mov => mov > 0)
+  .reduce((acc, mov) => acc + mov, 0);
+
+console.log(bankDepositSum);
+
+//* 2. Contar cuantos depositos han habido en el banco (minimo 1000)
+
+//? Primera solución
+// const numDeposits1000 = accounts
+//   .flatMap(account => account.movements)
+//   .filter(mov => mov >= 1000).length;
+// console.log(numDeposits1000);
+
+const numDeposits1000 = accounts.flatMap(account => account.movements).reduce();
+console.log(numDeposits1000);
