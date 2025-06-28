@@ -1125,5 +1125,44 @@ console.log(bankDepositSum);
 //   .filter(mov => mov >= 1000).length;
 // console.log(numDeposits1000);
 
-const numDeposits1000 = accounts.flatMap(account => account.movements).reduce();
+const numDeposits1000 = accounts
+  .flatMap(account => account.movements)
+  .reduce((count, cur) => (cur >= 1000 ? ++count : count), 0);
 console.log(numDeposits1000);
+
+//? Prefixed ++ operator
+
+// let a = 10;
+// console.log(a++); // 10
+// console.log(++a); // 11
+// console.log(a); // 11
+
+//* 3. Crea un nuevo objeto que contenga la suma de depositos y retiros
+
+const { deposits, withdrawals } = accounts
+  .flatMap(account => account.movements)
+  .reduce(
+    (sums, cur) => {
+      // cur > 0 ? (sums.deposits += cur) : (sums.withdrawals += cur);
+
+      sums[cur > 0 ? 'deposits' : 'withdrawals'] += cur;
+      return sums;
+    },
+    { deposits: 0, withdrawals: 0 }
+  );
+
+console.log(deposits, withdrawals);
+
+//* 4. Crear una función para convertir un string en title case
+//? Todas las letras son mayusculas
+//? This is a nice title -> This Is a Nice Title
+
+const convertTitleCase = function (title) {
+  const words = title.split(' ');
+  words.map(word => word.toLowerCase());
+  console.log(words);
+  return title;
+};
+console.log(convertTitleCase('this is a nice title'));
+// console.log(convertTitleCase('this is a LONG title but no too long'));
+// console.log(convertTitleCase('and here is another title whit EXAMPLE'));
