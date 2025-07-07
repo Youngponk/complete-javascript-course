@@ -196,16 +196,43 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
+const startLoutOutTime = function () {
+  const tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(Math.trunc(time % 60)).padStart(2, 0);
+
+    // En cada llamada mostrar el tiempo al usuario en la interfaz
+    labelTimer.textContent = `${min}:${sec}`;
+
+    //Cuando el timer llegue a 0
+    if (time === 0) {
+      clearInterval(timer);
+      // Disable the UI and clear the message
+      labelWelcome.textContent = 'Log in to get started';
+      containerApp.style.opacity = 0;
+    }
+
+    // decrease 1s
+    time--;
+  };
+
+  // Set time a 5 minutos
+  let time = 5;
+
+  // Llamar el timer cada segundo
+  tick();
+  const timer = setInterval(tick, 1000);
+  return timer;
+};
+
 ///////////////////////////////////////
 // Event handlers
-let currentAccount;
+let currentAccount, timer;
 
-//! FAKE ALWAYS LOGGED IN
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
-//! ------------------------------
-
+// //! FAKE ALWAYS LOGGED IN
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 //! ------------------------------
 
 btnLogin.addEventListener('click', function (e) {
@@ -224,7 +251,7 @@ btnLogin.addEventListener('click', function (e) {
     }`;
     containerApp.style.opacity = 100;
 
-    //! Experimentando con la API
+    //! Experimentando con la API de fechas
 
     const now = new Date();
     const options = {
@@ -247,6 +274,16 @@ btnLogin.addEventListener('click', function (e) {
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
+
+    //! Timer para el logout
+
+    // Si el timer existe en otra cuenta, lo elimina
+    if (timer) {
+      clearInterval(timer);
+    }
+
+    // Declaramos que el timer será la funcion llamada para saber cuando esté activa
+    timer = startLoutOutTime();
 
     // Update UI
     updateUI(currentAccount);
@@ -277,6 +314,10 @@ btnTransfer.addEventListener('click', function (e) {
 
     // Update UI
     updateUI(currentAccount);
+
+    //Reset Timer
+    clearInterval(timer);
+    timer = startLoutOutTime();
   }
 });
 
@@ -286,16 +327,22 @@ btnLoan.addEventListener('click', function (e) {
   const amount = Math.floor(+inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    // Add movement
-    currentAccount.movements.push(amount);
+    setTimeout(function () {
+      // Add movement
+      currentAccount.movements.push(amount);
 
-    // Add loan date
-    currentAccount.movementsDates.push(new Date().toISOString());
+      // Add loan date
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-    // Update UI
-    updateUI(currentAccount);
+      // Update UI
+      updateUI(currentAccount);
+    }, 2500);
   }
   inputLoanAmount.value = '';
+
+  //Reset Timer
+  clearInterval(timer);
+  timer = startLoutOutTime();
 });
 
 btnClose.addEventListener('click', function (e) {
@@ -628,11 +675,12 @@ console.log(
     new Intl.NumberFormat(navigator.language).format(num)
 ); // es-419 3,884,764.23
 
-*/
 
 //* -----------------------------------
 //* TIMERS: SETTIMEOUT AND SETINTERVAL *
 //* -----------------------------------
+
+//? setTimeout
 
 //? 1 milisegundo -> 1000segundos
 
@@ -649,3 +697,26 @@ console.log('Waiting...');
 if (ingredients.includes('spinach')) {
   clearTimeout(pizzaTimer);
 }
+
+//? setInterval
+
+//? Llama la función cada cierto tiempo (segundos)
+
+setInterval(function () {
+  const now = new Date();
+  console.log(now);
+}, 60000);
+
+//! Challenge -> Hacer un reloj
+
+setInterval(() => {
+  const now = new Date();
+  console.log(
+    `Hora: ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+  );
+}, 1000);
+*/
+
+//* -----------------------------------
+//* IMPLEMENTING A COUNTDOWN TIMER    *
+//* -----------------------------------
