@@ -608,7 +608,6 @@ console.log(days1);
 //* ---------------------------------
 //* INTERNATIONALIZING NUMBERS (INTL) *
 //* ---------------------------------
-*/
 
 const num = 3884764.23;
 
@@ -628,3 +627,25 @@ console.log(
     ' ' +
     new Intl.NumberFormat(navigator.language).format(num)
 ); // es-419 3,884,764.23
+
+*/
+
+//* -----------------------------------
+//* TIMERS: SETTIMEOUT AND SETINTERVAL *
+//* -----------------------------------
+
+//? 1 milisegundo -> 1000segundos
+
+const ingredients = ['olives', 'spinach'];
+const pizzaTimer = setTimeout(
+  (ing1, ing2) => console.log(`Here is your pizza whit ${ing1} and ${ing2} 🍕`),
+  3000,
+  ...ingredients
+);
+
+console.log('Waiting...');
+
+//? La funcion se cancelara porque detendra/limpiara el timer
+if (ingredients.includes('spinach')) {
+  clearTimeout(pizzaTimer);
+}
