@@ -1,12 +1,13 @@
 'use strict';
 
-///////////////////////////////////////
-// Modal window
-
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+///////////////////////////////////////
+// Modal window
 
 const openModal = function () {
   modal.classList.remove('hidden');
@@ -27,6 +28,109 @@ document.addEventListener('keydown', function (e) {
   if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
     closeModal();
   }
+});
+
+//! --------------------------------
+//! IMPLEMENTING SMOOTH SCROLLING  *
+//! --------------------------------
+
+btnScrollTo.addEventListener('click', function (e) {
+  //? Posición del elemento section1
+  const s1coords = section1.getBoundingClientRect();
+  console.log(s1coords);
+
+  //? Posición del elemento que se clickea (e)
+  console.log(e.target.getBoundingClientRect());
+
+  //? Posición actual de la pantalla cuando se clickea el btnScrollTo (basado en el viewport actual)
+  console.log('Current scroll (X/Y)', window.pageXOffset, window.pageYOffset);
+
+  //? Width y Height de la ventana cuando se clickea el elemento
+  console.log(
+    'height/width viewport',
+    document.documentElement.clientHeight,
+    document.documentElement.clientWidth
+  );
+
+  //* Scrolling
+  // window.scrollTo(
+  //   s1coords.left + window.pageXOffset,
+  //   s1coords.top + window.pageYOffset
+  // );
+
+  //? oldway
+
+  // window.scrollTo({
+  //   left: s1coords.left + window.pageXOffset,
+  //   top: s1coords.top + window.pageYOffset,
+  //   behavior: 'smooth',
+  // });
+
+  //? new way
+
+  section1.scrollIntoView({ behavior: 'smooth' });
+});
+
+//! -----------------------------------------------
+//! EVENT DELEGATION: IMPLEMENTING PAGE NAVIGATION *
+//! -----------------------------------------------
+
+// document.querySelectorAll('.nav__link').forEach(function (el) {
+//   el.addEventListener('click', function (e) {
+//     //? Previene que el tag a se mueva a su href #section--1
+//     e.preventDefault();
+
+//     const id = this.getAttribute('href');
+//     console.log(id);
+
+//     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+//   });
+// });
+
+//? 1. Add event listener to common parent element
+//? 2. Determine what element originated the event
+
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  e.preventDefault();
+
+  //? Matching strategy
+
+  if (e.target.classList.contains('nav__link')) {
+    const id = e.target.getAttribute('href');
+    console.log(id);
+
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+  }
+});
+
+//! ---------------------------
+//! MAKING A TABBED COMPONENT *
+//! ---------------------------
+
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+tabsContainer.addEventListener('click', function (e) {
+  //? Matching strategy
+  const clicked = e.target.closest('.operations__tab');
+  console.log(clicked);
+
+  //? Guard clause
+  if (!clicked) return;
+
+  //?Quitando el active a los demas botones
+  //? Quitando el active a los demas contenido
+  tabs.forEach(t => t.classList.remove('operations__tab--active'));
+  tabsContent.forEach(c => c.classList.remove('operations__content--active'));
+
+  //? Agregando la clase de active al boton que se clickea
+  clicked.classList.add('operations__tab--active');
+
+  //? Activando el contenido del boton seleccionado usando el data content
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add('operations__content--active');
 });
 
 /*
@@ -153,54 +257,6 @@ logo.classList.contains('c'); // not includes
 //! No usar -> sobre-escribe todas las clases existentes
 // logo.className = 'jonas';
 
-*/
-
-//* --------------------------------
-//* IMPLEMENTING SMOOTH SCROLLING  *
-//* --------------------------------
-
-const btnScrollTo = document.querySelector('.btn--scroll-to');
-const section1 = document.querySelector('#section--1');
-
-btnScrollTo.addEventListener('click', function (e) {
-  //? Posición del elemento section1
-  const s1coords = section1.getBoundingClientRect();
-  console.log(s1coords);
-
-  //? Posición del elemento que se clickea (e)
-  console.log(e.target.getBoundingClientRect());
-
-  //? Posición actual de la pantalla cuando se clickea el btnScrollTo (basado en el viewport actual)
-  console.log('Current scroll (X/Y)', window.pageXOffset, window.pageYOffset);
-
-  //? Width y Height de la ventana cuando se clickea el elemento
-  console.log(
-    'height/width viewport',
-    document.documentElement.clientHeight,
-    document.documentElement.clientWidth
-  );
-
-  //* Scrolling
-  // window.scrollTo(
-  //   s1coords.left + window.pageXOffset,
-  //   s1coords.top + window.pageYOffset
-  // );
-
-  //? oldway
-
-  // window.scrollTo({
-  //   left: s1coords.left + window.pageXOffset,
-  //   top: s1coords.top + window.pageYOffset,
-  //   behavior: 'smooth',
-  // });
-
-  //? new way
-
-  section1.scrollIntoView({ behavior: 'smooth' });
-});
-
-/*
-
 //* ------------------------------------
 //* TYPE OF EVENTS AND EVENT HANDLERS  *
 //* ------------------------------------
@@ -219,7 +275,6 @@ setTimeout(() => h1.removeEventListener('mouseenter', alertH1), 3000);
 
 // h1.onmouseenter = alertH1;
 
-*/
 
 //* -------------------------------------------
 //* EVENT PROPAGATION: BUBBLING AND CAPTURING  *
@@ -235,12 +290,63 @@ const randomColor = () =>
 
 document.querySelector('.nav__link').addEventListener('click', function (e) {
   this.style.backgroundColor = randomColor();
+  console.log('LINK', e.target, e.currentTarget);
+  console.log(e.currentTarget === this); // true
+
+  // Stop Propagation
+
+  // e.stopPropagation();
 });
 
 document.querySelector('.nav__links').addEventListener('click', function (e) {
   this.style.backgroundColor = randomColor();
+  console.log('CONTAINER', e.target, e.currentTarget);
 });
 
 document.querySelector('.nav').addEventListener('click', function (e) {
   this.style.backgroundColor = randomColor();
+  console.log('NAV', e.target, e.currentTarget);
 });
+
+
+//* -----------------
+//* DOM TRAVERSING  *
+//* -----------------
+
+const h1 = document.querySelector('h1');
+
+//? Going downwards: child
+console.log(h1.querySelectorAll('.highlight')); // NodeList(2) [span.highlight, span.highlight]
+console.log(h1.childNodes); // NodeList(9) [text, comment, text, span.highlight, text, br, text, span.highlight, text]
+console.log(h1.children); // HTMLCollection(3) [span.highlight, br, span.highlight]
+h1.firstElementChild.style.color = 'white';
+h1.lastElementChild.style.color = 'orangered';
+
+//? Going upwards: parents
+
+console.log(h1.parentNode); // div.header__title
+console.log(h1.parentElement); // div.header__title
+
+h1.closest('.header').style.background = 'var(--gradient-secondary)';
+
+h1.closest('h1').style.background = 'var(--gradient-primary)';
+
+//? Going sideways: hermanos
+
+console.log(h1.previousElementSibling); // Null -> no tiene un hermano antes
+console.log(h1.nextElementSibling); // h4
+
+console.log(h1.previousSibling); // #text
+console.log(h1.nextSibling); // #text
+
+//? Tricks
+
+console.log(h1.parentElement.children);
+
+[...h1.parentElement.children].forEach(function (el) {
+  if (el !== h1) {
+    el.style.transform = 'scale(0.5)';
+  }
+});
+
+*/
