@@ -1,5 +1,9 @@
 'use strict';
 
+const nav = document.querySelector('.nav');
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
 const modal = document.querySelector('.modal');
@@ -107,10 +111,6 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
 //! MAKING A TABBED COMPONENT *
 //! ---------------------------
 
-const tabs = document.querySelectorAll('.operations__tab');
-const tabsContainer = document.querySelector('.operations__tab-container');
-const tabsContent = document.querySelectorAll('.operations__content');
-
 tabsContainer.addEventListener('click', function (e) {
   //? Matching strategy
   const clicked = e.target.closest('.operations__tab');
@@ -131,6 +131,159 @@ tabsContainer.addEventListener('click', function (e) {
   document
     .querySelector(`.operations__content--${clicked.dataset.tab}`)
     .classList.add('operations__content--active');
+});
+
+//! -------------------------------------
+//! PASSING ARGUMENTS TO EVENT HANDLERS *
+//! -------------------------------------
+
+// Menu fade animation
+const handleHover = function (e, opacity) {
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+    const logo = link.closest('.nav').querySelector('img');
+    siblings.forEach(el => {
+      if (el !== link) {
+        el.style.opacity = opacity;
+      }
+    });
+    logo.style.opacity = opacity;
+  }
+};
+
+nav.addEventListener('mouseover', function (e) {
+  handleHover(e, 0.5);
+});
+
+nav.addEventListener('mouseout', function (e) {
+  handleHover(e, 1);
+});
+
+//! ---------------------------------------------------
+//! IMPLEMENTING A STICKY NAVITAGION: THE SCROLL EVENT*
+//! ---------------------------------------------------
+
+//? Sticky navigation
+// const sectionInitialCoords = section1.getBoundingClientRect();
+
+// window.addEventListener('scroll', function () {
+//   if (window.scrollY > sectionInitialCoords.top) {
+//     nav.classList.add('sticky');
+//   } else {
+//     nav.classList.remove('sticky');
+//   }
+// });
+
+//! ---------------------------------------------
+//! A BETTER WAY: THE INTERSECTION OBSERVER API *
+//! ---------------------------------------------
+
+//? Sticky navigation
+// const obsCallback = function (entries, observer) {
+//   entries.forEach(entry => {
+//     console.log(entry);
+//   });
+// };
+
+// const obsOptions = {
+//   //? Elemento que esta seleccionando
+//   root: null,
+//   //? Porcentaje de la interseccion
+//   threshold: [0, 0.2],
+// };
+
+// const observer = new IntersectionObserver(obsCallback, obsOptions);
+// observer.observe(section1);
+
+const header = document.querySelector('.header');
+const navHeight = nav.getBoundingClientRect().height;
+
+const stickyNav = function (entries) {
+  const [entry] = entries;
+  // console.log(entry);
+
+  if (!entry.isIntersecting) {
+    nav.classList.add('sticky');
+  } else {
+    nav.classList.remove('sticky');
+  }
+};
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
+});
+headerObserver.observe(header);
+
+//! ------------------------------
+//! REVEALING ELEMENTS ON SCROLL *
+//! ------------------------------
+
+//! ------------------------------
+//! FIXIN SCROLLING SECTION REVEAL *
+//! ------------------------------
+
+//? THE INTERSECTION OBSERVER API
+const allSections = document.querySelectorAll('.section');
+
+const revealSection = function (entries, observer) {
+  // console.log(entries);
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+
+    entry.target.classList.remove('section--hidden');
+
+    //? Evitar que siga "observando" (performance)
+    observer.unobserve(entry.target);
+  });
+};
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null, //? Target -> viewport
+  threshold: 0.15,
+});
+
+allSections.forEach(function (section) {
+  sectionObserver.observe(section);
+  //? Escondemos las secciones con JS
+  section.classList.add('section--hidden');
+});
+
+//? Si relogeamos la pagina en medio de las secciones no aparecen
+
+//! ---------------------
+//! LAZY LOADING IMAGES *
+//! ---------------------
+
+const imgTargets = document.querySelectorAll('img[data-src]');
+// console.log(imgTargets);
+
+const loadImg = function (entries, observer) {
+  const [entry] = entries;
+  // console.log(entry);
+
+  if (!entry.isIntersecting) return;
+
+  //? Remplazar src con data-src
+  entry.target.src = entry.target.dataset.src;
+  //? Para internet mas lento agregamos addeventlistener para que espere a que la imagen carge
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img');
+  });
+
+  observer.unobserve(entry.target);
+};
+
+const imageObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: '200px',
+});
+
+imgTargets.forEach(function (img) {
+  imageObserver.observe(img);
 });
 
 /*
